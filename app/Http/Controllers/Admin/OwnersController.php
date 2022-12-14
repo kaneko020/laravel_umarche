@@ -42,8 +42,8 @@ class OwnersController extends Controller
         $owners = Owner::select('id', 'name', 'email', 'created_at')
         ->paginate(3);
 
-        return view('admin.owners.index',
-        compact('owners'));
+        // compactで上記で取得した$ownersをviewへ渡す
+        return view('admin.owners.index', compact('owners'));
     }
 
     /**
@@ -64,7 +64,6 @@ class OwnersController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->name;
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:owners',
@@ -104,8 +103,10 @@ class OwnersController extends Controller
      */
     public function edit($id)
     {
+        // findOrFailは$idが見つからなかったとき404を返す
         $owner = Owner::findOrFail($id);
-        // dd($owner);
+
+        // compactで上記で取得した$ownerをviewへ渡す
         return view('admin.owners.edit', compact('owner'));
     }
 
@@ -149,7 +150,6 @@ class OwnersController extends Controller
             'status' => 'alert'
         ]);
 
-        // dd('削除処理');
     }
 
     public function expiredOwnerIndex()
